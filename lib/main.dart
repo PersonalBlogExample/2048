@@ -110,7 +110,8 @@ class GamePage extends StatefulWidget {
 }
 
 class _GamePageState extends State<GamePage> {
-  FocusNode _focusNode = FocusNode(); // 创建一个焦点节点以便监听键盘事件
+  final FocusNode _focusNode = FocusNode(); // 创建一个焦点节点以便监听键盘事件
+  final Set<LogicalKeyboardKey> _keysPressed = Set<LogicalKeyboardKey>();  // 追踪按下的键
 
   @override
   void initState() {
@@ -133,26 +134,30 @@ class _GamePageState extends State<GamePage> {
         focusNode: _focusNode, // 绑定焦点节点
         onKey: (RawKeyEvent event) {
           if (event is RawKeyDownEvent) {
-            // 只处理按键按下事件
-            switch (event.logicalKey.keyLabel) {
-              // 根据按键标签执行不同的移动操作
-              case 'w':
-              case 'Arrow Up':
-                game.moveUp(); // 向上移动
-                break;
-              case 's':
-              case 'Arrow Down':
-                game.moveDown(); // 向下移动
-                break;
-              case 'a':
-              case 'Arrow Left':
-                game.moveLeft(); // 向左移动
-                break;
-              case 'd':
-              case 'Arrow Right':
-                game.moveRight(); // 向右移动
-                break;
+            if (!_keysPressed.contains(event.logicalKey)) {
+              _keysPressed.add(event.logicalKey);
+              switch (event.logicalKey.keyLabel) {
+                // 根据按键标签执行不同的移动操作
+                case 'w':
+                case 'Arrow Up':
+                  game.moveUp(); // 向上移动
+                  break;
+                case 's':
+                case 'Arrow Down':
+                  game.moveDown(); // 向下移动
+                  break;
+                case 'a':
+                case 'Arrow Left':
+                  game.moveLeft(); // 向左移动
+                  break;
+                case 'd':
+                case 'Arrow Right':
+                  game.moveRight(); // 向右移动
+                  break;
+              }
             }
+          } else if (event is RawKeyUpEvent) {
+            _keysPressed.remove(event.logicalKey); // 删除已释放的键
           }
         },
         child: Center(
