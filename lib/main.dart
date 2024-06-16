@@ -199,7 +199,7 @@ class _GamePageState extends State<GamePage> {
                           }
                         },
                         child: AspectRatio(
-                          aspectRatio: 1,  // 保持 1:1 的长宽比
+                          aspectRatio: 1,  // 保持长宽比为1：1
                           child: Container(
                             width: gridSize,
                             height: gridSize,
