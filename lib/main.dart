@@ -48,6 +48,13 @@ class _HomePageState extends State<HomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
+                '用户名: Player',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
                 '历史最高分: ${highestScore}',
                 style: TextStyle(
                   fontSize: 24,
