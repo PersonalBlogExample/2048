@@ -25,6 +25,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text('2048主页'),
         centerTitle: true, // 将标题居中
@@ -170,7 +171,7 @@ class _GamePageState extends State<GamePage> {
             return Center(
               child: Container(
                 width: fixedContainerSize,
-                height: fixedContainerSize,
+                height: fixedContainerSize*1.2,
                 child: LayoutBuilder(
                   builder: (context, constraints) {
                     // 计算网格大小
@@ -202,8 +203,8 @@ class _GamePageState extends State<GamePage> {
                                 ),
                               ),
                               SizedBox(
-                                width: gridSize*0.5, // 按钮的宽度
-                                height: gridSize*0.1, // 按钮的高度
+                                width: gridSize * 0.5, // 按钮的宽度
+                                height: gridSize * 0.1, // 按钮的高度
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
                                     padding: const EdgeInsets.symmetric(
@@ -221,6 +222,7 @@ class _GamePageState extends State<GamePage> {
                           const SizedBox(height: 20),
                           // 游戏网格
                           GestureDetector(
+                            // 手势动作
                             onVerticalDragEnd: (details) {
                               if (details.primaryVelocity != null) {
                                 if (details.primaryVelocity! < 0) {
