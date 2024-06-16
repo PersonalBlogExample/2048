@@ -31,9 +31,6 @@ class HomePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-<<<<<<< HEAD
-            // 4×4 按钮
-=======
             // 新游戏按钮
             SizedBox(
               width: 200,  // 按钮的宽度
@@ -59,7 +56,6 @@ class HomePage extends StatelessWidget {
             ),
             SizedBox(height: 20),  // 按钮之间的间距
 
->>>>>>> 13aceb46bcde30e6faa304720c2f29deedb4a0e3
             SizedBox(
               width: 200,  // 按钮的宽度
               height: 60,  // 按钮的高度
@@ -118,14 +114,11 @@ class HomePage extends StatelessWidget {
                 ),
                 child: Text('排行榜'),
                 onPressed: () {
-<<<<<<< HEAD
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => LeaderboardPage()),
                   );
-=======
                   // 这里可以添加显示排行榜的逻辑
->>>>>>> 13aceb46bcde30e6faa304720c2f29deedb4a0e3
                 },
               ),
             ),
