@@ -94,7 +94,6 @@ class HomePage extends StatelessWidget {
                     context,
                     MaterialPageRoute(builder: (context) => LeaderboardPage()),
                   );
-                  // 这里可以添加显示排行榜的逻辑
                 },
               ),
             ),
