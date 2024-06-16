@@ -24,13 +24,6 @@ class GameModel with ChangeNotifier {
   // 获取当前分数的公共方法
   int get score => _score;
 
-  void init(){
-    _score = 0;
-    _grid = List.generate(gridSize, (i) => List.generate(gridSize, (j) => 0));  // 将网格初始化为全 0
-    _addNewTile();  // 添加第一个新方块
-    _addNewTile();  // 添加第二个新方块
-    notifyListeners();
-  }
   // 在随机空白位置添加一个新的方块（2 或 4）的私有方法
   void _addNewTile() {
     List<int> emptyTiles = [];  // 用于存储所有空白位置的列表
@@ -96,14 +89,11 @@ class GameModel with ChangeNotifier {
       }
       _grid[i] = newRow;  // 更新当前行
     }
-    if (_checkGameOver()) {
-      _showGameOverDialog(BuildContext as BuildContext);
-    }
     return moved;  // 返回是否有方块移动
   }
 
   // 私有方法，检查游戏是否结束
-  bool _checkGameOver() {
+  bool checkGameOver() {
     for (int i = 0; i < gridSize; i++) {
       for (int j = 0; j < gridSize; j++) {
         if (_grid[i][j] == 0) return false;
@@ -166,26 +156,5 @@ class GameModel with ChangeNotifier {
       notifyListeners();  // 通知监听器数据发生变化
     }
     _rotateRight();  // 将网格旋转回来
-  }
-  // 私有方法，显示游戏结束对话框
-  void _showGameOverDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Game Over"),
-          content: Text("Your score: $_score"),
-          actions: [
-            TextButton(
-              child: Text("Restart"),
-              onPressed: () {
-                Navigator.of(context).pop();
-                reset();
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 }

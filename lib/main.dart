@@ -136,6 +136,28 @@ class _GamePageState extends State<GamePage> {
     // 固定容器的大小
     double fixedContainerSize;
     int size = game.gridSize;
+    // 显示游戏结束对话框
+    void _showGameOverDialog(BuildContext context, int score) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("游戏结束"),
+            content: Text("你的分数: ${score}"),
+            actions: [
+              TextButton(
+                child: Text("重新开始"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  game.reset();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+
     return Scaffold(
         appBar: AppBar(
           title: Text('2048-${size}x${size}'), // 应用程序的标题
@@ -166,6 +188,9 @@ class _GamePageState extends State<GamePage> {
                     game.moveRight(); // 向右移动
                     break;
                 }
+                if (game.checkGameOver()) {
+                  _showGameOverDialog(context, game.score);
+                }
               }
             } else if (event is RawKeyUpEvent) {
               _keysPressed.remove(event.logicalKey); // 删除已释放的键
@@ -178,7 +203,7 @@ class _GamePageState extends State<GamePage> {
             return Center(
               child: Container(
                 width: fixedContainerSize,
-                height: fixedContainerSize*1.2,
+                height: fixedContainerSize * 1.2,
                 child: LayoutBuilder(
                   builder: (context, constraints) {
                     // 计算网格大小
@@ -220,7 +245,7 @@ class _GamePageState extends State<GamePage> {
                                   ),
                                   child: const Text('新游戏'),
                                   onPressed: () {
-                                    game.init();
+                                    game.reset();
                                   },
                                 ),
                               ),
