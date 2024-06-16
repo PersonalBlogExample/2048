@@ -21,7 +21,14 @@ class GameModel with ChangeNotifier {
   List<List<int>> get grid => _grid;
   // 获取当前分数的公共方法
   int get score => _score;
-
+  
+  void init(){
+    _score = 0;
+    _grid = List.generate(gridSize, (i) => List.generate(gridSize, (j) => 0));  // 将网格初始化为全 0
+    _addNewTile();  // 添加第一个新方块
+    _addNewTile();  // 添加第二个新方块
+    notifyListeners();
+  }
   // 在随机空白位置添加一个新的方块（2 或 4）的私有方法
   void _addNewTile() {
     List<int> emptyTiles = [];  // 用于存储所有空白位置的列表
