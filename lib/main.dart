@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => GameModel(),  // 创建 GameModel 实例并提供给子树
+      create: (context) => GameModel(4),  // 创建 GameModel 实例并提供给子树
       child: MaterialApp(
         title: '2048',
         theme: ThemeData(

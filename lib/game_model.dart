@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';  // 导入 Flutter 的核心包
 
 // 游戏模型类，使用 ChangeNotifier 来通知监听器（如 UI）数据变化
 class GameModel with ChangeNotifier {
-  final int gridSize = 4;  // 定义网格大小为 4x4
+  int gridSize = 4;
   List<List<int>> _grid = [[]];  // 内部存储网格的二维列表
   int _score = 0;  // 内部存储分数
 
   // 构造函数，初始化网格和添加两个新的方块
-  GameModel() {
+  GameModel(int size) {
+    gridSize = size;
     _grid = List.generate(gridSize, (i) => List.generate(gridSize, (j) => 0));  // 初始化网格为全 0
     _addNewTile();  // 添加第一个新的方块
     _addNewTile();  // 添加第二个新的方块
