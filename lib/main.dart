@@ -26,7 +26,8 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('2048'),
+        title: const Text('2048主页'),
+        centerTitle: true, // 将标题居中
       ),
       body: Center(
         child: Column(
@@ -54,17 +55,17 @@ class HomePage extends StatelessWidget {
                 },
               ),
             ),
-            SizedBox(height: 20), // 按钮之间的间距
-            // 5×5 按钮
+            const SizedBox(height: 20), // 按钮之间的间距
+            // 5x5 按钮
             SizedBox(
               width: 200,
               height: 60,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0),
-                  textStyle: TextStyle(fontSize: 24),
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  textStyle: const TextStyle(fontSize: 24),
                 ),
-                child: Text('5x5'),
+                child: const Text('5x5'),
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -78,17 +79,17 @@ class HomePage extends StatelessWidget {
                 },
               ),
             ),
-            SizedBox(height: 20), // 按钮之间的间距
-            // 排行榜 按钮
+            const SizedBox(height: 20), // 按钮之间的间距
+            // 排行榜按钮
             SizedBox(
               width: 200,
               height: 60,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0),
-                  textStyle: TextStyle(fontSize: 24),
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  textStyle: const TextStyle(fontSize: 24),
                 ),
-                child: Text('排行榜'),
+                child: const Text('排行榜'),
                 onPressed: () {
                   Navigator.push(
                     context,
@@ -111,7 +112,8 @@ class GamePage extends StatefulWidget {
 
 class _GamePageState extends State<GamePage> {
   final FocusNode _focusNode = FocusNode(); // 创建一个焦点节点以便监听键盘事件
-  final Set<LogicalKeyboardKey> _keysPressed = Set<LogicalKeyboardKey>();  // 追踪按下的键
+  final Set<LogicalKeyboardKey> _keysPressed =
+      Set<LogicalKeyboardKey>(); // 追踪按下的键
 
   @override
   void initState() {
@@ -124,165 +126,176 @@ class _GamePageState extends State<GamePage> {
     final game = Provider.of<GameModel>(context); // 获取 GameModel 实例
 
     // 固定容器的大小
-    double fixedContainerSize = 500.0;
-
+    double fixedContainerSize;
+    int size = game.gridSize;
     return Scaffold(
-      appBar: AppBar(
-        title: Text('2048'), // 应用程序的标题
-      ),
-      body: RawKeyboardListener(
-        focusNode: _focusNode, // 绑定焦点节点
-        onKey: (RawKeyEvent event) {
-          if (event is RawKeyDownEvent) {
-            if (!_keysPressed.contains(event.logicalKey)) {
-              _keysPressed.add(event.logicalKey);
-              switch (event.logicalKey.keyLabel) {
-                // 根据按键标签执行不同的移动操作
-                case 'w':
-                case 'Arrow Up':
-                  game.moveUp(); // 向上移动
-                  break;
-                case 's':
-                case 'Arrow Down':
-                  game.moveDown(); // 向下移动
-                  break;
-                case 'a':
-                case 'Arrow Left':
-                  game.moveLeft(); // 向左移动
-                  break;
-                case 'd':
-                case 'Arrow Right':
-                  game.moveRight(); // 向右移动
-                  break;
+        appBar: AppBar(
+          title: Text('2048-${size}x${size}'), // 应用程序的标题
+          centerTitle: true,
+        ),
+        body: RawKeyboardListener(
+          focusNode: _focusNode, // 绑定焦点节点
+          onKey: (RawKeyEvent event) {
+            if (event is RawKeyDownEvent) {
+              if (!_keysPressed.contains(event.logicalKey)) {
+                _keysPressed.add(event.logicalKey);
+                switch (event.logicalKey.keyLabel) {
+                  // 根据按键标签执行不同的移动操作
+                  case 'w':
+                  case 'Arrow Up':
+                    game.moveUp(); // 向上移动
+                    break;
+                  case 's':
+                  case 'Arrow Down':
+                    game.moveDown(); // 向下移动
+                    break;
+                  case 'a':
+                  case 'Arrow Left':
+                    game.moveLeft(); // 向左移动
+                    break;
+                  case 'd':
+                  case 'Arrow Right':
+                    game.moveRight(); // 向右移动
+                    break;
+                }
               }
+            } else if (event is RawKeyUpEvent) {
+              _keysPressed.remove(event.logicalKey); // 删除已释放的键
             }
-          } else if (event is RawKeyUpEvent) {
-            _keysPressed.remove(event.logicalKey); // 删除已释放的键
-          }
-        },
-        child: Center(
-          child: Container(
-            width: fixedContainerSize,
-            height: fixedContainerSize,
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                // 计算网格大小
-                double gridSize = constraints.maxWidth < constraints.maxHeight
-                    ? constraints.maxWidth * 0.8
-                    : constraints.maxHeight * 0.8;
+          },
+          child: LayoutBuilder(builder: (context, constraints) {
+            fixedContainerSize = constraints.maxWidth < constraints.maxHeight
+                ? constraints.maxWidth * 0.8
+                : constraints.maxHeight * 0.8;
+            return Center(
+              child: Container(
+                width: fixedContainerSize,
+                height: fixedContainerSize,
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    // 计算网格大小
+                    double gridSize =
+                        constraints.maxWidth < constraints.maxHeight
+                            ? constraints.maxWidth * 0.8
+                            : constraints.maxHeight * 0.8;
 
-                // 根据网格大小计算每个格子的大小
-                double cellSize =
-                    (gridSize - 2 * 16 - (game.gridSize - 1) * 8) /
-                        game.gridSize;
+                    // 根据网格大小计算每个格子的大小
+                    double cellSize =
+                        (gridSize - 2 * 16 - (game.gridSize - 1) * 8) /
+                            game.gridSize;
 
-                // 根据网格大小计算分数的字体大小
-                double scoreFontSize = gridSize * 0.1;
+                    // 根据网格大小计算分数的字体大小
+                    double scoreFontSize = gridSize * 0.05;
 
-                return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // 显示分数
-                      Text(
-                        '分数: ${game.score}',
-                        style: TextStyle(
-                          fontSize: scoreFontSize,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      // 新游戏按钮
-                      SizedBox(
-                        width: 200, // 按钮的宽度
-                        height: 60, // 按钮的高度
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            padding: EdgeInsets.symmetric(horizontal: 16.0),
-                            textStyle: TextStyle(fontSize: 24),
-                          ),
-                          child: Text('新游戏'),
-                          onPressed: () {
-                            game.init();
-                          },
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      // 游戏网格
-                      GestureDetector(
-                        onVerticalDragEnd: (details) {
-                          if (details.primaryVelocity != null) {
-                            if (details.primaryVelocity! < 0) {
-                              game.moveUp();
-                            } else if (details.primaryVelocity! > 0) {
-                              game.moveDown();
-                            }
-                          }
-                        },
-                        onHorizontalDragEnd: (details) {
-                          if (details.primaryVelocity != null) {
-                            if (details.primaryVelocity! < 0) {
-                              game.moveLeft();
-                            } else if (details.primaryVelocity! > 0) {
-                              game.moveRight();
-                            }
-                          }
-                        },
-                        child: AspectRatio(
-                          aspectRatio: 1, // 保持长宽比为1：1
-                          child: Container(
-                            width: gridSize,
-                            height: gridSize,
-                            child: GridView.builder(
-                              padding: EdgeInsets.all(16),
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: game.gridSize, // 设置列数为网格大小
-                                crossAxisSpacing: 8, // 设置列间距
-                                mainAxisSpacing: 8, // 设置行间距
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Text(
+                                '分数: ${game.score}',
+                                style: TextStyle(
+                                  fontSize: scoreFontSize,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                              itemCount:
-                                  game.gridSize * game.gridSize, // 设置网格项的总数
-                              itemBuilder: (context, index) {
-                                int value = game.grid[index ~/ game.gridSize]
-                                    [index % game.gridSize]; // 计算当前格子的值
-                                return Container(
-                                  width: cellSize,
-                                  height: cellSize,
-                                  decoration: BoxDecoration(
-                                    color: value == 0
-                                        ? Colors.grey[300]
-                                        : Colors.orange[
-                                            100 * (value % 10)], // 根据值设置颜色
-                                    borderRadius:
-                                        BorderRadius.circular(8), // 设置圆角
+                              SizedBox(
+                                width: gridSize*0.5, // 按钮的宽度
+                                height: gridSize*0.1, // 按钮的高度
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16.0),
+                                    textStyle: const TextStyle(fontSize: 24),
                                   ),
-                                  child: Center(
-                                    child: Text(
-                                      value == 0
-                                          ? ''
-                                          : value
-                                              .toString(), // 显示值（如果值为 0 则显示为空）
-                                      style: const TextStyle(
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.bold,
+                                  child: const Text('新游戏'),
+                                  onPressed: () {
+                                    game.init();
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 20),
+                          // 游戏网格
+                          GestureDetector(
+                            onVerticalDragEnd: (details) {
+                              if (details.primaryVelocity != null) {
+                                if (details.primaryVelocity! < 0) {
+                                  game.moveUp();
+                                } else if (details.primaryVelocity! > 0) {
+                                  game.moveDown();
+                                }
+                              }
+                            },
+                            onHorizontalDragEnd: (details) {
+                              if (details.primaryVelocity != null) {
+                                if (details.primaryVelocity! < 0) {
+                                  game.moveLeft();
+                                } else if (details.primaryVelocity! > 0) {
+                                  game.moveRight();
+                                }
+                              }
+                            },
+                            child: AspectRatio(
+                              aspectRatio: 1, // 保持长宽比为1：1
+                              child: SizedBox(
+                                width: gridSize,
+                                height: gridSize,
+                                child: GridView.builder(
+                                  padding: EdgeInsets.all(16),
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: game.gridSize, // 设置列数为网格大小
+                                    crossAxisSpacing: 8, // 设置列间距
+                                    mainAxisSpacing: 8, // 设置行间距
+                                  ),
+                                  itemCount:
+                                      game.gridSize * game.gridSize, // 设置网格项的总数
+                                  itemBuilder: (context, index) {
+                                    int value =
+                                        game.grid[index ~/ game.gridSize]
+                                            [index % game.gridSize]; // 计算当前格子的值
+                                    return Container(
+                                      width: cellSize,
+                                      height: cellSize,
+                                      decoration: BoxDecoration(
+                                        color: value == 0
+                                            ? Colors.grey[300]
+                                            : Colors.orange[
+                                                100 * (value % 10)], // 根据值设置颜色
+                                        borderRadius:
+                                            BorderRadius.circular(8), // 设置圆角
                                       ),
-                                    ),
-                                  ),
-                                );
-                              },
+                                      child: Center(
+                                        child: Text(
+                                          value == 0
+                                              ? ''
+                                              : value
+                                                  .toString(), // 显示值（如果值为 0 则显示为空）
+                                          style: const TextStyle(
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
                             ),
                           ),
-                        ),
+                        ],
                       ),
-                    ],
-                  ),
-                );
-              },
-            ),
-          ),
-        ),
-      ),
-    );
+                    );
+                  },
+                ),
+              ),
+            );
+          }),
+        ));
   }
 
   @override
