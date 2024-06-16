@@ -31,7 +31,8 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
   // 创建小部件的视觉表示
   Widget build(BuildContext context) {
     // 根据is4x4的值，选择显示4x4或5x5的排行榜数据
-    List<Map<String, dynamic>> currentLeaderboardData = is4x4 ? leaderboardData4x4 : leaderboardData5x5;
+    List<Map<String, dynamic>> currentLeaderboardData =
+        is4x4 ? leaderboardData4x4 : leaderboardData5x5;
 
     // 对排行榜数据按分数降序排序
     currentLeaderboardData.sort((a, b) => b['score'].compareTo(a['score']));
@@ -59,7 +60,8 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
               itemBuilder: (context, index) {
                 // 对于每一项，创建一个ListTile，显示玩家的名字和分数
                 return ListTile(
-                  title: Text('${index + 1}. ${currentLeaderboardData[index]["name"]}'),
+                  title: Text(
+                      '${index + 1}. ${currentLeaderboardData[index]["name"]}'),
                   trailing: Text('${currentLeaderboardData[index]["score"]} 分'),
                 );
               },
@@ -72,7 +74,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
             children: [
               ElevatedButton(
                 child: Text('4x4 排行榜'),
-                 // 当点击4x4按钮时，设置is4x4为true
+                // 当点击4x4按钮时，设置is4x4为true
                 onPressed: () {
                   setState(() {
                     is4x4 = true;

@@ -54,6 +54,7 @@ class _HomePageState extends State<HomePage> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
+              const SizedBox(height: 20), // 间距
               Text(
                 '历史最高分: ${highestScore}',
                 style: TextStyle(
@@ -61,6 +62,7 @@ class _HomePageState extends State<HomePage> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
+              const SizedBox(height: 20), // 间距
               SizedBox(
                 width: 200, // 按钮的宽度
                 height: 60, // 按钮的高度
