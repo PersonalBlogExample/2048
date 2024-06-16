@@ -4,13 +4,14 @@ import 'package:collection/collection.dart';  // 导入 collection 包用于列�
 
 // ChangeNotifier 用于通知监听器（如 UI）更新数据的游戏模型类
 class GameModel with ChangeNotifier {
-  final int gridSize = 4;  // 定义网格尺寸为 4 行 4 列
+  int gridSize = 4;  // 定义网格尺寸为 4 行 4 列
   List<List<int>> _grid = [[]];  // 用于存储网格数据的内部二维列表
   int _score = 0;  // 用于存储游戏得分的内部变量
   final ListEquality _equality = const ListEquality();  // 用于列表内容的相等性比较
 
   // 构造函数：初始化网格并添加两个初始方块
-  GameModel() {
+  GameModel(int size) {
+    gridSize = size;
     _grid = List.generate(gridSize, (i) => List.generate(gridSize, (j) => 0));  // 将网格初始化为全 0
     _addNewTile();  // 添加第一个新方块
     _addNewTile();  // 添加第二个新方块
