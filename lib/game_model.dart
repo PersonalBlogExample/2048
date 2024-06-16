@@ -21,7 +21,7 @@ class GameModel with ChangeNotifier {
   List<List<int>> get grid => _grid;
   // 获取当前分数的公共方法
   int get score => _score;
-  
+
   void init(){
     _score = 0;
     _grid = List.generate(gridSize, (i) => List.generate(gridSize, (j) => 0));  // 将网格初始化为全 0
@@ -94,9 +94,34 @@ class GameModel with ChangeNotifier {
       }
       _grid[i] = newRow;  // 更新当前行
     }
+    if (_checkGameOver()) {
+      _showGameOverDialog(BuildContext as BuildContext);
+    }
     return moved;  // 返回是否有方块移动
   }
 
+  // 私有方法，检查游戏是否结束
+  bool _checkGameOver() {
+    for (int i = 0; i < gridSize; i++) {
+      for (int j = 0; j < gridSize; j++) {
+        if (_grid[i][j] == 0) return false;
+        if (i > 0 && _grid[i][j] == _grid[i - 1][j]) return false;
+        if (i < gridSize - 1 && _grid[i][j] == _grid[i + 1][j]) return false;
+        if (j > 0 && _grid[i][j] == _grid[i][j - 1]) return false;
+        if (j < gridSize - 1 && _grid[i][j] == _grid[i][j + 1]) return false;
+      }
+    }
+    return true;
+  }
+
+  // 重置游戏
+  void reset() {
+    _grid = List.generate(gridSize, (i) => List.generate(gridSize, (j) => 0));
+    _score = 0;
+    _addNewTile();
+    _addNewTile();
+    notifyListeners();
+  }
   // 公共方法：处理向左移动
   void moveLeft() {
     if (_slideLeft()) {  // 如果有方块移动
@@ -135,5 +160,26 @@ class GameModel with ChangeNotifier {
       notifyListeners();  // 通知监听器数据发生变化
     }
     _rotateRight();  // 将网格旋转回来
+  }
+  // 私有方法，显示游戏结束对话框
+  void _showGameOverDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Game Over"),
+          content: Text("Your score: $_score"),
+          actions: [
+            TextButton(
+              child: Text("Restart"),
+              onPressed: () {
+                Navigator.of(context).pop();
+                reset();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
