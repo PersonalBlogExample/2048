@@ -4,6 +4,7 @@ import 'package:flutter/services.dart'; // 导入 services 包以便处理键盘
 import 'game_model.dart'; // 导入之前定义的游戏模型
 import 'leaderboard.dart'; // 导入排行榜页面
 
+int highestScore = 0;
 void main() {
   runApp(MyApp());
 }
@@ -21,7 +22,12 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,83 +36,98 @@ class HomePage extends StatelessWidget {
         title: const Text('2048主页'),
         centerTitle: true, // 将标题居中
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              '历史最高分: ${game.highestScore}',
-              style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
+      body: WillPopScope(
+        onWillPop: () async {
+          setState(() {
+            // 根据需要在返回时刷新一些状态, 例如从数据库加载数据等
+          });
+          return true;
+        },
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                '历史最高分: ${highestScore}',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(
+                width: 200, // 按钮的宽度
+                height: 60, // 按钮的高度
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    textStyle: const TextStyle(fontSize: 24),
+                  ),
+                  child: const Text('4x4'),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) {
+                        return ChangeNotifierProvider(
+                          create: (context) => GameModel(4),
+                          child: GamePage(),
+                        );
+                      }),
+                    ).then((_) {
+                      setState(() {}); // 刷新主界面
+                    });
+                  },
+                ),
+              ),
+              const SizedBox(height: 20), // 按钮之间的间距
+              // 5x5 按钮
+              SizedBox(
+                width: 200,
+                height: 60,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    textStyle: const TextStyle(fontSize: 24),
+                  ),
+                  child: const Text('5x5'),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) {
+                        return ChangeNotifierProvider(
+                          create: (context) => GameModel(5),
+                          child: GamePage(),
+                        );
+                      }),
+                    ).then((_) {
+                      setState(() {}); // 刷新主界面
+                    });
+                  },
+                ),
+              ),
+              const SizedBox(height: 20), // 按钮之间的间距
+              // 排行榜按钮
+              SizedBox(
+                width: 200,
+                height: 60,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    textStyle: const TextStyle(fontSize: 24),
+                  ),
+                  child: const Text('排行榜'),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => LeaderboardPage()),
+                    ).then((_) {
+                      setState(() {}); // 刷新主界面
+                    });
+                  },
+                ),
+              ),
+            ],
           ),
-            SizedBox(
-              width: 200, // 按钮的宽度
-              height: 60, // 按钮的高度
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  textStyle: const TextStyle(fontSize: 24),
-                ),
-                child: const Text('4x4'),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) {
-                      return ChangeNotifierProvider(
-                        create: (context) => GameModel(4),
-                        child: GamePage(),
-                      );
-                    }),
-                  );
-                },
-              ),
-            ),
-            const SizedBox(height: 20), // 按钮之间的间距
-            // 5x5 按钮
-            SizedBox(
-              width: 200,
-              height: 60,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  textStyle: const TextStyle(fontSize: 24),
-                ),
-                child: const Text('5x5'),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) {
-                      return ChangeNotifierProvider(
-                        create: (context) => GameModel(5),
-                        child: GamePage(),
-                      );
-                    }),
-                  );
-                },
-              ),
-            ),
-            const SizedBox(height: 20), // 按钮之间的间距
-            // 排行榜按钮
-            SizedBox(
-              width: 200,
-              height: 60,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  textStyle: const TextStyle(fontSize: 24),
-                ),
-                child: const Text('排行榜'),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => LeaderboardPage()),
-                  );
-                },
-              ),
-            ),
-          ],
         ),
       ),
     );
@@ -187,6 +208,9 @@ class _GamePageState extends State<GamePage> {
                   case 'Arrow Right':
                     game.moveRight(); // 向右移动
                     break;
+                }
+                if (game.score > highestScore) {
+                  highestScore = game.score;
                 }
                 if (game.checkGameOver()) {
                   _showGameOverDialog(context, game.score);

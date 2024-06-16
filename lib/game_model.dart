@@ -8,8 +8,6 @@ class GameModel with ChangeNotifier {
   List<List<int>> _grid = [[]];  // 用于存储网格数据的内部二维列表
   int _score = 0;  // 用于存储游戏得分的内部变量
   final ListEquality _equality = const ListEquality();  // 用于列表内容的相等性比较
-  int _highestScore = 0;  // 用于存储历史最高分的内部变量
-  int get highestScore => _highestScore;
 
   // 构造函数：初始化网格并添加两个初始方块
   GameModel(int size) {
@@ -103,10 +101,6 @@ class GameModel with ChangeNotifier {
         if (j < gridSize - 1 && _grid[i][j] == _grid[i][j + 1]) return false;
       }
     }
-    // 更新历史最高分
-    if (_score > _highestScore) {
-    _highestScore = _score;
-  }
     return true;
   }
 
