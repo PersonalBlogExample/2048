@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';  // 导入 provider 包以便使用状态管理
 import 'package:flutter/services.dart';  // 导入 services 包以便处理键盘事件
 import 'game_model.dart';  // 导入之前定义的游戏模型
-
+import 'leaderboard.dart';  // 导入排行榜页面
 void main() {
   runApp(MyApp());
 }
@@ -31,6 +31,7 @@ class HomePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            // 4×4 按钮
             SizedBox(
               width: 200,  // 按钮的宽度
               height: 60,  // 按钮的高度
@@ -54,7 +55,7 @@ class HomePage extends StatelessWidget {
               ),
             ),
             SizedBox(height: 20),  // 按钮之间的间距
-
+            // 5×5 按钮
             SizedBox(
               width: 200,
               height: 60,
@@ -78,7 +79,7 @@ class HomePage extends StatelessWidget {
               ),
             ),
             SizedBox(height: 20),  // 按钮之间的间距
-
+            // 排行榜 按钮
             SizedBox(
               width: 200,
               height: 60,
@@ -89,6 +90,10 @@ class HomePage extends StatelessWidget {
                 ),
                 child: Text('排行榜'),
                 onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => LeaderboardPage()),
+                  );
                 },
               ),
             ),
