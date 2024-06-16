@@ -10,14 +10,90 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => GameModel(4),  // 创建 GameModel 实例并提供给子树
-      child: MaterialApp(
-        title: '2048',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,  // 设置主题颜色
+    return MaterialApp(
+      title: '2048',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: HomePage(),
+    );
+  }
+}
+
+class HomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('2048'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: 200,  // 按钮的宽度
+              height: 60,  // 按钮的高度
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  textStyle: TextStyle(fontSize: 24),
+                ),
+                child: Text('4x4'),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) {
+                      return ChangeNotifierProvider(
+                        create: (context) => GameModel(4),
+                        child: GamePage(),
+                      );
+                    }),
+                  );
+                },
+              ),
+            ),
+            SizedBox(height: 20),  // 按钮之间的间距
+
+            SizedBox(
+              width: 200,
+              height: 60,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  textStyle: TextStyle(fontSize: 24),
+                ),
+                child: Text('5x5'),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) {
+                      return ChangeNotifierProvider(
+                        create: (context) => GameModel(5),
+                        child: GamePage(),
+                      );
+                    }),
+                  );
+                },
+              ),
+            ),
+            SizedBox(height: 20),  // 按钮之间的间距
+
+            SizedBox(
+              width: 200,
+              height: 60,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  textStyle: TextStyle(fontSize: 24),
+                ),
+                child: Text('排行榜'),
+                onPressed: () {
+                },
+              ),
+            ),
+          ],
         ),
-        home: GamePage(),  // 设置主页为 GamePage
       ),
     );
   }
