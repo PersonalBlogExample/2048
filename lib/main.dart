@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomePage(),
+      home: HomePage(),  // 初始页面设置为 HomePage
     );
   }
 }
@@ -31,6 +31,31 @@ class HomePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            // 新游戏按钮
+            SizedBox(
+              width: 200,  // 按钮的宽度
+              height: 60,  // 按钮的高度
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  textStyle: TextStyle(fontSize: 24),
+                ),
+                child: Text('新游戏'),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) {
+                      return ChangeNotifierProvider(
+                        create: (context) => GameModel(4),  // 创建4x4或者默认的格子游戏模型
+                        child: GamePage(),
+                      );
+                    }),
+                  );
+                },
+              ),
+            ),
+            SizedBox(height: 20),  // 按钮之间的间距
+
             SizedBox(
               width: 200,  // 按钮的宽度
               height: 60,  // 按钮的高度
@@ -89,6 +114,7 @@ class HomePage extends StatelessWidget {
                 ),
                 child: Text('排行榜'),
                 onPressed: () {
+                  // 这里可以添加显示排行榜的逻辑
                 },
               ),
             ),
@@ -117,7 +143,7 @@ class _GamePageState extends State<GamePage> {
   Widget build(BuildContext context) {
     final game = Provider.of<GameModel>(context);  // 获取 GameModel 实例
 
-    // 固定容器的大小，这里设置为 300x300
+    // 固定容器的大小
     double fixedContainerSize = 500.0;
 
     return Scaffold(
@@ -131,19 +157,19 @@ class _GamePageState extends State<GamePage> {
             switch (event.logicalKey.keyLabel) {  // 根据按键标签执行不同的移动操作
               case 'w':
               case 'Arrow Up':
-                game.moveUp();
+                game.moveUp();  // 向上移动
                 break;
               case 's':
               case 'Arrow Down':
-                game.moveDown();
+                game.moveDown();  // 向下移动
                 break;
               case 'a':
               case 'Arrow Left':
-                game.moveLeft();
+                game.moveLeft();  // 向左移动
                 break;
               case 'd':
               case 'Arrow Right':
-                game.moveRight();
+                game.moveRight();  // 向右移动
                 break;
             }
           }

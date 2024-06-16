@@ -39,6 +39,7 @@ class GameModel with ChangeNotifier {
     }
   }
 
+
   // 私有方法：将网格向左旋转 90 度
   void _rotateLeft() {
     List<List<int>> newGrid = List.generate(gridSize, (i) => List.generate(gridSize, (j) => 0));  // 创建一个新的空网格
