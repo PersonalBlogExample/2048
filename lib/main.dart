@@ -34,6 +34,13 @@ class HomePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Text(
+              '历史最高分: ${game.highestScore}',
+              style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
             SizedBox(
               width: 200, // 按钮的宽度
               height: 60, // 按钮的高度
