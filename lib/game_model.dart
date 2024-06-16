@@ -1,5 +1,5 @@
-import 'dart:math';  // 导入 Dart 的数学库以便使用随机数生成器
-import 'package:flutter/material.dart';  // 导入 Flutter 的核心包
+import 'dart:math';  // 导入 Dart 的数学库以使用随机数生成器
+import 'package:flutter/material.dart';  // 导入 Flutter 核心包
 
 // 游戏模型类，使用 ChangeNotifier 来通知监听器（如 UI）数据变化
 class GameModel with ChangeNotifier {
